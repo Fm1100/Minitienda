@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Gestión de Productos</h2>
+
+<form action="/productos" method="POST">
+    <label for="nombre">Nombre:</label><br>
+    <input type="text" id="nombre" name="nombre" required><br><br>
+
+    <label for="descripcion">Descripción:</label><br>
+    <input type="text" id="descripcion" name="descripcion"><br><br>
+
+    <label for="precio">Precio:</label><br>
+    <input type="number" id="precio" name="precio" step="0.01" required><br><br>
+
+    <label for="stock">Stock inicial:</label><br>
+    <input type="number" id="stock" name="stock" required><br><br>
+
+    <label for="categoria_id">Categoría:</label><br>
+    <select id="categoria_id" name="categoria_id" required>
+        <option value="">Selecciona una categoría...</option>
+        {% for cat in categorias_html %}
+        <option value="{{ cat['id'] }}">{{ cat['nombre'] }}</option>
+        {% endfor %}
+    </select><br><br>
+
+    <button type="submit">Guardar Producto</button>
+</form>
+
+<hr>
+
+<h3>Lista de Productos</h3>
+<ul>
+    {% for prod in productos_html %}
+    <li>
+        <strong>{{ prod['nombre'] }}</strong> - ${{ prod['precio'] }}
+        (Stock: {{ prod['stock'] }}) |
+        <em>Categoría: {{ prod['nombre_categoria'] }}</em>
+    </li>
+    {% else %}
+    <li>Aún no hay productos registrados.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

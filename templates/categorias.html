@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Gestión de Categorías</h2>
+
+<form action="/categorias" method="POST">
+    <label for="nombre">Nombre de la nueva categoría:</label>
+    <input type="text" id="nombre" name="nombre" required>
+    <button type="submit">Guardar Categoría</button>
+</form>
+
+<hr>
+
+<h3>Categorías Actuales</h3>
+<ul>
+    {% for cat in categorias_html %}
+    <li>
+        <span>ID: {{ cat['id'] }} | <strong>{{ cat['nombre'] }}</strong></span>
+
+        <div class="acciones-item">
+            <a href="/categorias/editar/{{ cat['id'] }}" class="btn-editar">Editar</a>
+            <form action="/categorias/eliminar/{{ cat['id'] }}" method="POST" style="margin: 0;">
+                <button type="submit" class="btn-eliminar"
+                    onclick="return confirm('¿Estás seguro de eliminar esta categoría?');">Eliminar</button>
+            </form>
+        </div>
+    </li>
+    {% else %}
+    <li>Aún no hay categorías registradas.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
