@@ -11,9 +11,17 @@
 <body>
     <header>
         <nav>
-            <a href="/">Inicio</a>
-            <a href="/productos">Productos</a>
-            <a href="/categorias">Categorías</a>
+            <a href="/">Inicio</a> |
+            <a href="/productos">Productos</a> |
+            <a href="/categorias">Categorías</a> |
+
+            {% if session.get('nombre_usuario') %}
+            <span>Hola, {{ session['nombre_usuario'] }}</span> |
+            <a href="/logout">Cerrar Sesión</a>
+            {% else %}
+            <a href="/registro">Registrarse</a> |
+            <a href="/login">Iniciar Sesión</a>
+            {% endif %}
         </nav>
     </header>
 
@@ -23,9 +31,9 @@
     </main>
 
     <footer>
-        <p>Mini Tienda V1 - Proyecto de aprendizaje
-        </p>
-        <p>Hecho por <b>Fabian Marin</b></p>
+        <hr>
+        <p>Mini Tienda V2 - Proyecto de aprendizaje</p>
+        <p><strong>Hecho por Fabian Marin</strong></p>
     </footer>
 </body>
 

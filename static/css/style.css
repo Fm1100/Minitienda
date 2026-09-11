@@ -16,7 +16,7 @@ header,
 main,
 footer {
     width: 100%;
-    max-width: 700px;
+    max-width: 850px;
     padding: 10px 20px;
     box-sizing: border-box;
 }
