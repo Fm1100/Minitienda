@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    <h2>Tu Carrito de Compras</h2>
+
+    {% if productos_carrito %}
+    <table border="1" style="width: 100%; margin-top: 20px; border-collapse: collapse; text-align: left;">
+        <thead>
+            <tr style="background-color: #f8f9fa;">
+                <th style="padding: 10px;">Imagen</th>
+                <th style="padding: 10px;">Producto</th>
+                <th style="padding: 10px;">Precio</th>
+                <th style="padding: 10px; text-align: center;">Cantidad</th>
+                <th style="padding: 10px;">Subtotal</th>
+                <th style="padding: 10px; text-align: center;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in productos_carrito %}
+            <tr>
+                <td style="padding: 10px; text-align: center;">
+                    {% if item.imagen %}
+                    <img src="{{ url_for('static', filename='uploads/' + item.imagen) }}" width="50"
+                        alt="{{ item.nombre }}">
+                    {% else %}
+                    <span>Sin imagen</span>
+                    {% endif %}
+                </td>
+                <td style="padding: 10px;">{{ item.nombre }}</td>
+                <td style="padding: 10px;">${{ item.precio }}</td>
+                <td style="padding: 10px; text-align: center;">
+                    <!-- Formulario para actualizar la cantidad manualmente respetando el stock -->
+                    <form action="/carrito/actualizar/{{ item.id }}" method="POST"
+                        style="display: inline-flex; align-items: center; gap: 4px;">
+                        <a href="/carrito/disminuir/{{ item.id }}"
+                            style="background: #ffc107; color: black; padding: 2px 8px; text-decoration: none; border-radius: 3px; font-weight: bold;">-</a>
+
+                        <input type="number" name="cantidad" value="{{ item.cantidad }}" min="1" max="{{ item.stock }}"
+                            style="width: 40px; text-align: center;">
+
+                        <a href="/carrito/agregar/{{ item.id }}"
+                            style="background: #28a745; color: white; padding: 2px 8px; text-decoration: none; border-radius: 3px; font-weight: bold;">+</a>
+
+                        <button type="submit"
+                            style="background: #007bff; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 12px; margin-left: 4px;"
+                            title="Actualizar cantidad">Actualizar</button>
+                    </form>
+                </td>
+                <td style="padding: 10px;">${{ item.subtotal }}</td>
+                <td style="padding: 10px; text-align: center;">
+                    <a href="/carrito/remover/{{ item.id }}"
+                        style="background-color: #dc3545; color: white; padding: 6px 10px; text-decoration: none; border-radius: 4px; font-size: 13px;">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Resumen y botones de acción -->
+    <div
+        style="margin-top: 25px; display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; padding: 20px; border-radius: 8px;">
+        <div>
+            <a href="/carrito/limpiar"
+                style="color: #dc3545; text-decoration: none; font-weight: 500; margin-right: 15px;">Vaciar Carrito</a>
+            <a href="/" style="color: #007bff; text-decoration: none; font-weight: 500;">Seguir Comprando</a>
+        </div>
+
+        <div style="text-align: right;">
+            <h3 style="margin: 0 0 15px 0;">Total a Pagar: ${{ total }}</h3>
+            <a href="/checkout"
+                style="background-color: #28a745; color: white; padding: 12px 25px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 16px;">Proceder
+                al Pago</a>
+        </div>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 50px; background: #f8f9fa; border-radius: 8px; margin-top: 20px;">
+        <p style="color: #6c757d; font-size: 18px; margin-bottom: 20px;">Tu carrito de compras está vacío.</p>
+        <a href="/"
+            style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-weight: bold;">Ver
+            Productos</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

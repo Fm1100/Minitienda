@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Productos de la categoría: {{ categoria.nombre }}</h2>
+
+{% if productos_html %}
+<table border="1" style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+    <thead>
+        <tr style="background-color: #f8f9fa;">
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for producto in productos_html %}
+        <tr>
+            <td style="text-align: center;">
+                {% if producto.imagen %}
+                <img src="{{ url_for('static', filename='uploads/' + producto.imagen) }}" width="80"
+                    alt="{{ producto.nombre }}">
+                {% else %}
+                <span>Sin imagen</span>
+                {% endif %}
+            </td>
+            <td>{{ producto.nombre }}</td>
+            <td>{{ producto.descripcion }}</td>
+            <td>${{ producto.precio }}</td>
+            <td>{{ producto.stock }}</td>
+            <td style="text-align: center;">
+                <!-- Formulario con control de cantidad integrado (+, -, input y botón de agregar) -->
+                <form action="/carrito/agregar/{{ producto.id }}" method="POST"
+                    style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+                    <!-- Botón restar local -->
+                    <button type="button"
+                        onclick="cambiarCantidad('input-{{ producto.id }}', -1, 1, {{ producto.stock }})"
+                        style="background-color: #ffc107; color: black; border: none; padding: 6px 10px; border-radius: 3px; font-weight: bold; cursor: pointer;"
+                        title="Restar">-</button>
+
+                    <!-- Input numérico editable o modificable por teclado -->
+                    <input type="number" id="input-{{ producto.id }}" name="cantidad" value="1" min="1"
+                        max="{{ producto.stock }}" style="width: 50px; text-align: center; padding: 5px;">
+
+                    <!-- Botón sumar local -->
+                    <button type="button"
+                        onclick="cambiarCantidad('input-{{ producto.id }}', 1, 1, {{ producto.stock }})"
+                        style="background-color: #28a745; color: white; border: none; padding: 6px 10px; border-radius: 3px; font-weight: bold; cursor: pointer;"
+                        title="Sumar">+</button>
+
+                    <!-- Botón final de envío -->
+                    <button type="submit"
+                        style="background-color: #0066cc; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-weight: 600; margin-left: 5px;">Agregar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No hay productos disponibles en esta categoría todavía.</p>
+{% endif %}
+
+<br>
+<a href="/categorias">Volver a Categorías</a>
+
+<!-- Script rápido en JavaScript para manejar el incremento/decremento visual con los botones + y - -->
+<script>
+    function cambiarCantidad(inputId, cambio, min, max) {
+        const input = document.getElementById(inputId);
+        let valorActual = parseInt(input.value) || 1;
+        let nuevoValor = valorActual + cambio;
+
+        if (nuevoValor >= min && nuevoValor <= max) {
+            input.value = nuevoValor;
+        }
+    }
+</script>
+{% endblock %}

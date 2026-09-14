@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div
+    style="max-width: 600px; margin: 0 auto; background: #f8f9fa; padding: 30px; border-radius: 8px; border: 1px solid #dee2e6;">
+    <h2 style="margin-top: 0; text-align: center; color: #333;">Finalizar Compra</h2>
+    <p style="text-align: center; color: #6c757d; margin-bottom: 25px;">Ingresa tus datos de envío para procesar tu
+        pedido y actualizar el inventario.</p>
+
+    <form action="/checkout" method="POST" style="display: flex; flex-direction: column; gap: 15px;">
+        <div>
+            <label for="direccion" style="display: block; font-weight: 500; margin-bottom: 5px;">Dirección de
+                entrega:</label>
+            <input type="text" id="direccion" name="direccion" required placeholder="Ej: Calle 10 # 5-20, Barrio Centro"
+                style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+        </div>
+
+        <div>
+            <label for="telefono" style="display: block; font-weight: 500; margin-bottom: 5px;">Teléfono de
+                contacto:</label>
+            <input type="text" id="telefono" name="telefono" required placeholder="Ej: 3101234567"
+                style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <a href="/carrito"
+                style="flex: 1; text-align: center; background-color: #6c757d; color: white; padding: 12px; text-decoration: none; border-radius: 4px; font-weight: 500;">Volver
+                al Carrito</a>
+            <button type="submit"
+                style="flex: 1; background-color: #28a745; color: white; border: none; padding: 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px;">Confirmar
+                y Pagar</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

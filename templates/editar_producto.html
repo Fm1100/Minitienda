@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Editar Producto</h2>
+
+<form action="/productos/editar/{{ producto.id }}" method="POST" enctype="multipart/form-data">
+    <div>
+        <label for="nombre">Nombre del producto:</label>
+        <input type="text" id="nombre" name="nombre" value="{{ producto.nombre }}" required>
+    </div>
+
+    <div>
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" name="descripcion">{{ producto.descripcion }}</textarea>
+    </div>
+
+    <div>
+        <label for="precio">Precio:</label>
+        <input type="number" step="0.01" id="precio" name="precio" value="{{ producto.precio }}" required>
+    </div>
+
+    <div>
+        <label for="stock">Stock:</label>
+        <input type="number" id="stock" name="stock" value="{{ producto.stock }}" required>
+    </div>
+
+    <div>
+        <label for="categoria_id">Categoría:</label>
+        <select id="categoria_id" name="categoria_id" required>
+            {% for cat in categorias_html %}
+            <option value="{{ cat.id }}" {% if cat.id==producto.categoria_id %}selected{% endif %}>
+                {{ cat.nombre }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div>
+        <label>Imagen Actual:</label><br>
+        {% if producto.imagen %}
+        <img src="{{ url_for('static', filename='uploads/' + producto.imagen) }}" width="100" alt="Imagen actual"><br>
+        {% else %}
+        <p>No tiene imagen cargada</p>
+        {% endif %}
+
+        <label for="imagen">Subir nueva imagen (opcional):</label>
+        <input type="file" id="imagen" name="imagen" accept="image/*">
+    </div>
+
+    <button type="submit">Actualizar Producto</button>
+</form>
+
+<br>
+<a href="/productos">Volver a Productos</a>
+{% endblock %}

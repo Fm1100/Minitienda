@@ -3,30 +3,39 @@
 {% block content %}
 <h2>Gestión de Categorías</h2>
 
+<!-- Formulario para crear categoría -->
 <form action="/categorias" method="POST">
-    <label for="nombre">Nombre de la nueva categoría:</label>
-    <input type="text" id="nombre" name="nombre" required>
+    <div>
+        <label for="nombre">Nombre de la categoría:</label>
+        <input type="text" id="nombre" name="nombre" required>
+    </div>
     <button type="submit">Guardar Categoría</button>
 </form>
 
 <hr>
 
-<h3>Categorías Actuales</h3>
-<ul>
+<h3>Lista de Categorías</h3>
+<ul style="list-style-type: none; padding: 0;">
     {% for cat in categorias_html %}
-    <li>
-        <span>ID: {{ cat['id'] }} | <strong>{{ cat['nombre'] }}</strong></span>
+    <li
+        style="margin-bottom: 10px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
+        <!-- El nombre ahora es un enlace interactivo para ver sus productos -->
+        <a href="/categoria/{{ cat.id }}/productos" style="font-weight: bold; text-decoration: none; color: #007bff;">
+            {{ cat.nombre }}
+        </a>
 
-        <div class="acciones-item">
-            <a href="/categorias/editar/{{ cat['id'] }}" class="btn-editar">Editar</a>
-            <form action="/categorias/eliminar/{{ cat['id'] }}" method="POST" style="margin: 0;">
-                <button type="submit" class="btn-eliminar"
+        <div>
+            <a href="/categorias/editar/{{ cat.id }}"
+                style="background-color: #ffc107; color: black; padding: 4px 8px; text-decoration: none; border-radius: 3px; margin-right: 5px;">Editar</a>
+
+            <form action="/categorias/eliminar/{{ cat.id }}" method="POST"
+                style="display: inline; margin: 0; padding: 0;">
+                <button type="submit"
+                    style="background-color: #dc3545; color: white; border: none; padding: 5px 8px; border-radius: 3px; cursor: pointer;"
                     onclick="return confirm('¿Estás seguro de eliminar esta categoría?');">Eliminar</button>
             </form>
         </div>
     </li>
-    {% else %}
-    <li>Aún no hay categorías registradas.</li>
     {% endfor %}
 </ul>
 {% endblock %}

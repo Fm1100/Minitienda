@@ -4,36 +4,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini Tienda</title>
+    <title>Tienda Online</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
 <body>
-    <header>
-        <nav>
-            <a href="/">Inicio</a> |
-            <a href="/productos">Productos</a> |
-            <a href="/categorias">Categorías</a> |
+    <header
+        style="background: #f8f9fa; padding: 15px 30px; border-bottom: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center;">
+        <nav style="display: flex; gap: 15px; align-items: center;">
+            <a href="/" style="text-decoration: none; color: #007bff; font-weight: bold;">Inicio</a>
 
-            {% if session.get('nombre_usuario') %}
-            <span>Hola, {{ session['nombre_usuario'] }}</span> |
-            <a href="/logout">Cerrar Sesión</a>
-            {% else %}
-            <a href="/registro">Registrarse</a> |
-            <a href="/login">Iniciar Sesión</a>
+            <!-- Solo el administrador ve los enlaces de gestión de inventario -->
+            {% if session.get('rol') == 'admin' %}
+            <span style="color: #ccc;">|</span>
+            <a href="/productos" style="text-decoration: none; color: #495057;">Gestionar Productos</a>
+            <span style="color: #ccc;">|</span>
+            <a href="/categorias" style="text-decoration: none; color: #495057;">Gestionar Categorías</a>
             {% endif %}
+
+            <span style="color: #ccc;">|</span>
+            <a href="/carrito" style="text-decoration: none; color: #495057;">Carrito 🛒 ({{ total_carrito }})</a>
         </nav>
+
+        <div>
+            {% if session.get('usuario_id') %}
+            <span style="margin-right: 15px; font-weight: 500;">Hola, {{ session.get('nombre_usuario') }} {% if
+                session.get('rol') == 'admin' %}(Admin){% endif %}</span>
+            <a href="/logout"
+                style="background-color: #dc3545; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 14px;">Cerrar
+                Sesión</a>
+            {% else %}
+            <a href="/login" style="margin-right: 10px; text-decoration: none; color: #007bff;">Iniciar Sesión</a>
+            <a href="/registro"
+                style="background-color: #28a745; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 14px;">Registrarse</a>
+            {% endif %}
+        </div>
     </header>
 
-    <main>
-        {% block content %}
-        {% endblock %}
+    <main style="padding: 30px; max-width: 1200px; margin: 0 auto; min-height: 70vh;">
+        {% block content %}{% endblock %}
     </main>
 
-    <footer>
-        <hr>
-        <p>Mini Tienda V2 - Proyecto de aprendizaje</p>
-        <p><strong>Hecho por Fabian Marin</strong></p>
+    <!-- Pie de página con el crédito de autoría -->
+    <footer
+        style="text-align: center; padding: 20px; background: #f8f9fa; border-top: 1px solid #dee2e6; color: #6c757d; font-size: 14px; margin-top: 40px;">
+        Proyecto de Aprendizaje | Hecho por <b>Fabian Marin</b>
     </footer>
 </body>
 

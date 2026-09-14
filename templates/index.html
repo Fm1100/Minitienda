@@ -1,6 +1,101 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Bienvenido a la Mini Tienda</h1>
-<p>Nuestra base de datos y estructura base ya se encuentran operando correctamente.</p>
+<div style="text-align: center; margin-bottom: 30px;">
+    <h1>¡Bienvenido a Tienda-Online !</h1>
+    <p style="color: #6c757d;">Explora nuestros productos y categorías disponibles para llevar a casa.</p>
+</div>
+
+<!-- Sección de Categorías (Navegación rápida para clientes y visitantes) -->
+<div style="margin-bottom: 30px; background: #f8f9fa; padding: 20px; border-radius: 8px;">
+    <h3>Categorías</h3>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+        {% for cat in categorias_html %}
+        <a href="/categoria/{{ cat.id }}/productos"
+            style="background-color: #007bff; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-size: 14px;">
+            {{ cat.nombre }}
+        </a>
+        {% else %}
+        <p style="color: #6c757d; margin: 0;">No hay categorías registradas todavía.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Escaparate de Todos los Productos (Visible para clientes y visitantes) -->
+<div>
+    <h3>Catálogo General de Productos</h3>
+
+    {% if productos_html %}
+    <table border="1" style="width: 100%; margin-top: 15px; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #f8f9fa;">
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos_html %}
+            <tr>
+                <td style="text-align: center;">
+                    {% if producto.imagen %}
+                    <img src="{{ url_for('static', filename='uploads/' + producto.imagen) }}" width="70"
+                        alt="{{ producto.nombre }}">
+                    {% else %}
+                    <span>Sin imagen</span>
+                    {% endif %}
+                </td>
+                <td>{{ producto.nombre }}</td>
+                <td><span style="background: #e9ecef; padding: 4px 8px; border-radius: 4px; font-size: 13px;">{{
+                        producto.nombre_categoria }}</span></td>
+                <td>{{ producto.descripcion }}</td>
+                <td>${{ producto.precio }}</td>
+                <td>{{ producto.stock }}</td>
+                <td style="text-align: center;">
+                    <!-- Formulario con control de cantidad integrado (+, -, input y botón de agregar) -->
+                    <form action="/carrito/agregar/{{ producto.id }}" method="POST"
+                        style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+                        <button type="button"
+                            onclick="cambiarCantidad('input-{{ producto.id }}', -1, 1, {{ producto.stock }})"
+                            style="background-color: #ffc107; color: black; border: none; padding: 5px 8px; border-radius: 3px; font-weight: bold; cursor: pointer;"
+                            title="Restar">-</button>
+
+                        <input type="number" id="input-{{ producto.id }}" name="cantidad" value="1" min="1"
+                            max="{{ producto.stock }}" style="width: 45px; text-align: center; padding: 4px;">
+
+                        <button type="button"
+                            onclick="cambiarCantidad('input-{{ producto.id }}', 1, 1, {{ producto.stock }})"
+                            style="background-color: #28a745; color: white; border: none; padding: 5px 8px; border-radius: 3px; font-weight: bold; cursor: pointer;"
+                            title="Sumar">+</button>
+
+                        <button type="submit"
+                            style="background-color: #0066cc; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: 600; margin-left: 5px;">Agregar
+                            al carrito</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: #6c757d; margin-top: 15px;">No hay productos disponibles en el catálogo todavía.</p>
+    {% endif %}
+</div>
+
+<!-- Script de control dinámico de cantidades -->
+<script>
+    function cambiarCantidad(inputId, cambio, min, max) {
+        const input = document.getElementById(inputId);
+        let valorActual = parseInt(input.value) || 1;
+        let nuevoValor = valorActual + cambio;
+
+        if (nuevoValor >= min && nuevoValor <= max) {
+            input.value = nuevoValor;
+        }
+    }
+</script>
 {% endblock %}
